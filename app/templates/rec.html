@@ -1,0 +1,40 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1 class="title">
+        Want some unique recommendations?
+        <a href="{{ url_for('main.rec_me') }}">
+        <button class="button is-success" >
+            Click here!
+        </button></a>
+    </h1>
+    {% if movies %}
+        <div class="columns is-multiline is-mobile">
+            {% for movie in movies %}
+                <div class="box column is-one-quarter">
+                    <article class="tile is-child is-box">
+                        <p class="title">{{ movie.name }}</p>
+                        <p class="subtitle">{% for category in movie.categories.split('|') %}
+                            <span class="tag is-info">{{ category }}</span>
+                        {% endfor %}</p>
+                        <figure class="image">
+                            {% if movie.image_url != "NULL" %}
+                                <img style="height: 25rem; width: 20rem" src="{{ movie.image_url }}">
+                            {% else %}
+                                <img style="height: 25rem; width: 20rem"
+                                     src="https://eapp.org/wp-content/uploads/2018/05/poster_placeholder.jpg">
+                            {% endif %}
+                        </figure>
+                    </article>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="subtitle">
+            Imagine that here are the recommendations...
+        </div>
+    {% endif %}
+{% endblock %}

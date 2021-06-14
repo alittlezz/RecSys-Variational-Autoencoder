@@ -1,0 +1,107 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/profile.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/profile.js') }}"></script>
+
+    <h1 class="title">
+        Welcome, {{ name }}!
+    </h1>
+    <div class="panel">
+        <form method="GET" action="/profile">
+            <div class="control has-icons-left">
+                <input class="input" type="text" placeholder="Search movie" name="movieName" value="{{ movie_name }}">
+                <span class="icon is-left">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </span>
+
+            </div>
+            <button class="button is-success has-text-centered">Search movies!</button>
+        </form>
+    </div>
+    <div class="columns">
+        <div class="column is-two-fifths">
+            <h1 class="subtitle">Rated movies</h1>
+            <table class="table is-fullwidth">
+                <thead>
+                <tr>
+                    <th>Poster</th>
+                    <th>Name</th>
+                    <th>Tags</th>
+                    <th>Rating</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for rating in userRatings %}
+                    <tr>
+                        <td>
+                             {% if rating.movie.image_url != "NULL" %}
+                                 <img class="movie-poster" src="{{ rating.movie.image_url }}" >
+                             {% else %}
+                                 <img class="movie-poster" src="https://eapp.org/wp-content/uploads/2018/05/poster_placeholder.jpg" >
+                             {% endif %}
+                        </td>
+                        <td>{{ rating.movie.name }}</td>
+                        <td>
+                            {% for category in rating.movie.categories.split('|') %}
+                                <span class="tag is-info">{{ category }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>{{ rating.value }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="column is-three-fifths is-offset-1">
+            <h1 class="subtitle">Not yet rated</h1>
+            <table class="table is-fullwidth">
+                <thead>
+                <tr>
+                    <th>Poster</th>
+                    <th>Name</th>
+                    <th>Categories</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for movie in movies %}
+                    <tr>
+                        <td>
+                             {% if movie.image_url != "NULL" %}
+                                 <img class="movie-poster" src="{{ movie.image_url }}" >
+                             {% else %}
+                                 <img class="movie-poster" src="https://eapp.org/wp-content/uploads/2018/05/poster_placeholder.jpg" >
+                             {% endif %}
+                        </td>
+                        <td>{{ movie.name }}</td>
+                        <td>
+                            {% for category in movie.categories.split('|') %}
+                                <span class="tag is-info">{{ category }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <form method="POST" action="/ratings">
+                                <input style="display: none" name="movieID" value="{{ movie.id }}">
+                                <div class="columns">
+                                    <div class="column">
+                                        <input class="input" type="text" name="rating" placeholder="Rating">
+                                    </div>
+                                    <div class="column">
+                                        <button class="button is-danger">Rate!</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+#tab-content div {
+    display: none;
+}
+
+#tab-content div.is-active {
+    display: block;
+}
+
+img.movie-poster{
+    max-height: 10rem;
+}
